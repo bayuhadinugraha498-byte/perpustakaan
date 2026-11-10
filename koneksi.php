@@ -1,18 +1,15 @@
-
 <?php
+// Koneksi database MySQL Laragon
 $host = "localhost";
 $user = "root";
 $password = "";
 $database = "db_perpustakaan";
 
-$conn = mysqli_connect(
-    $host,
-    $user,
-    $password,
-    $database
-);
+$conn = new mysqli($host, $user, $password, $database);
 
-if (!$conn) {
-    die("Koneksi gagal: " . mysqli_connect_error());
+if ($conn->connect_error) {
+    die("Koneksi database gagal: " . $conn->connect_error);
 }
+
+$conn->set_charset("utf8mb4");
 ?>
