@@ -1,41 +1,34 @@
 <?php
 require_once 'koneksi.php';
 require_once 'fungsi.php';
-
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 if (!$id) {
     setPesan('error', 'ID buku tidak valid.');
     header('Location: index.php');
     exit;
 }
-
 $stmt = $conn->prepare("SELECT * FROM buku WHERE id = ?");
 $stmt->bind_param("i", $id);
 $stmt->execute();
 $buku = $stmt->get_result()->fetch_assoc();
-
 if (!$buku) {
     setPesan('error', 'Data buku tidak ditemukan.');
     header('Location: index.php');
     exit;
 }
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $kode = trim($_POST['kode_buku'] ?? '');
     $judul = trim($_POST['judul'] ?? '');
     $penulis = trim($_POST['penulis'] ?? '');
     $penerbit = trim($_POST['penerbit'] ?? '');
     $tahun = filter_var($_POST['tahun'] ?? '', FILTER_VALIDATE_INT);
-
     if ($kode === '' || $judul === '' || $penulis === '' || $penerbit === '' || $tahun === false || $tahun < 1) {
         setPesan('error', 'Semua kolom wajib diisi dan tahun harus berupa angka yang valid.');
         header("Location: edit.php?id={$id}");
         exit;
     }
-
     $update = $conn->prepare("UPDATE buku SET kode_buku=?, judul=?, penulis=?, penerbit=?, tahun=? WHERE id=?");
     $update->bind_param("ssssii", $kode, $judul, $penulis, $penerbit, $tahun, $id);
-
     if ($update->execute()) {
         setPesan('success', 'Data buku berhasil diperbarui.');
         header('Location: index.php');
