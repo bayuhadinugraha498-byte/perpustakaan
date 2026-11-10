@@ -1,0 +1,215 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f1f5f9;
+    color: #334155;
+    line-height: 1.6;
+}
+.container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 15px;
+}
+.form-card {
+    width: 100%;
+    max-width: 500px;
+    background: #ffffff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+.form-header {
+    background: #1e3a8a;
+    color: white;
+    padding: 25px 30px;
+}
+.form-header h2 {
+    font-size: 25px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+.form-header p {
+    font-size: 14px;
+    color: #dbeafe;
+}
+form {
+    padding: 30px;
+}
+.form-group {
+    margin-bottom: 20px;
+}
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #334155;
+}
+.form-group input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #334155;
+    background: #ffffff;
+    outline: none;
+    transition: all 0.3s ease;
+}
+.form-group input::placeholder {
+    color: #94a3b8;
+}
+.form-group input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+.form-button {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+}
+.form-button button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.form-button button:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}
+.btn-kembali {
+    flex: 1;
+    padding: 12px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 8px;
+    background: #e2e8f0;
+    color: #334155;
+    font-size: 15px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+.btn-kembali:hover {
+    background: #cbd5e1;
+}
+h2 {
+    color: #1e3a8a;
+    margin-bottom: 20px;
+}
+a {
+    transition: 0.3s;
+}
+a[href="tambah.php"] {
+    display: inline-block;
+    padding: 11px 18px;
+    background: #2563eb;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+a[href="tambah.php"]:hover {
+    background: #1d4ed8;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    margin-top: 15px;
+}
+th {
+    background: #1e3a8a;
+    color: white;
+    font-weight: 600;
+    padding: 14px 12px;
+    text-align: left;
+}
+td {
+    padding: 12px;
+    border-bottom: 1px solid #e2e8f0;
+    font-size: 14px;
+}
+tr:nth-child(even) {
+    background: #f8fafc;
+}
+tbody tr:hover,
+table tr:not(:first-child):hover {
+    background: #eff6ff;
+}
+td a {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 2px;
+}
+td a[href^="edit.php"] {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+td a[href^="edit.php"]:hover {
+    background: #bfdbfe;
+}
+td a[href^="hapus.php"] {
+    background: #fee2e2;
+    color: #dc2626;
+}
+td a[href^="hapus.php"]:hover {
+    background: #fecaca;
+}
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+        align-items: flex-start;
+    }
+    .form-card {
+        max-width: 100%;
+    }
+    form {
+        padding: 22px;
+    }
+    .form-header {
+        padding: 22px;
+    }
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    th, td {
+        padding: 10px;
+    }
+}
+@media (max-width: 480px) {
+    .form-button {
+        flex-direction: column;
+    }
+    .form-header h2 {
+        font-size: 22px;
+    }
+    .form-group input {
+        font-size: 14px;
+    }
+}
+
