@@ -1,19 +1,32 @@
 <?php
-include 'koneksi.php';
-if (isset($_POST['simpan'])) {
-    $kode = $_POST['kode_buku'];
-    $judul = $_POST['judul'];
-    $penulis = $_POST['penulis'];
-    $penerbit = $_POST['penerbit'];
-    $tahun = $_POST['tahun'];
-    $query = mysqli_query($conn, "INSERT INTO buku
-    (kode_buku, judul, penulis, penerbit, tahun)
-    VALUES ('$kode', '$judul', '$penulis', '$penerbit', '$tahun')");
-    if ($query) {
-        header("Location: index.php");
+require_once 'koneksi.php';
+require_once 'fungsi.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $kode = trim($_POST['kode_buku'] ?? '');
+    $judul = trim($_POST['judul'] ?? '');
+    $penulis = trim($_POST['penulis'] ?? '');
+    $penerbit = trim($_POST['penerbit'] ?? '');
+    $tahun = filter_var($_POST['tahun'] ?? '', FILTER_VALIDATE_INT);
+
+    if ($kode === '' || $judul === '' || $penulis === '' || $penerbit === '' || $tahun === false || $tahun < 1) {
+        setPesan('error', 'Semua kolom wajib diisi dan tahun harus berupa angka yang valid.');
+        header('Location: tambah.php');
+        exit;
+    }
+
+    $stmt = $conn->prepare("INSERT INTO buku (kode_buku, judul, penulis, penerbit, tahun) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssi", $kode, $judul, $penulis, $penerbit, $tahun);
+
+    if ($stmt->execute()) {
+        setPesan('success', 'Buku berhasil ditambahkan.');
+        header('Location: index.php');
         exit;
     } else {
-        echo "Gagal menambahkan buku: " . mysqli_error($conn);
+        $pesan = $stmt->errno === 1062 ? 'Kode buku sudah digunakan. Gunakan kode yang berbeda.' : 'Gagal menambahkan buku.';
+        setPesan('error', $pesan);
+        header('Location: tambah.php');
+        exit;
     }
 }
 ?>
@@ -22,53 +35,54 @@ if (isset($_POST['simpan'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Buku</title>
+    <title>Tambah Buku | Perpustakaan</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container">
-    <div class="form-card">
-
-        <div class="form-header">
-            <h2>Tambah Buku</h2>
-            <p>Masukkan informasi buku perpustakaan</p>
+<header class="topbar">
+    <a class="brand brand-link" href="index.php">
+        <div class="brand-icon">▤</div>
+        <div><strong>Perpustakaan</strong><span>Sistem Manajemen Buku</span></div>
+    </a>
+    <a class="top-link" href="index.php">← Kembali ke daftar</a>
+</header>
+<main class="form-page">
+    <section class="form-card">
+        <div class="form-heading">
+            <div class="form-heading-icon">＋</div>
+            <p class="eyebrow">KOLEKSI PERPUSTAKAAN</p>
+            <h1>Tambah Buku</h1>
+            <p class="muted">Lengkapi informasi buku yang ingin ditambahkan.</p>
         </div>
-        <form method="POST">
+        <?php tampilPesan(); ?>
+        <form method="POST" class="book-form">
             <div class="form-group">
-                <label>Kode Buku</label>
-                <input type="text" name="kode_buku"
-                placeholder="Contoh: BK001" required>
+                <label for="kode_buku">Kode Buku</label>
+                <input id="kode_buku" type="text" name="kode_buku" maxlength="20" placeholder="Contoh: BK001" required>
             </div>
             <div class="form-group">
-                <label>Judul Buku</label>
-                <input type="text" name="judul"
-                placeholder="Masukkan judul buku" required>
+                <label for="judul">Judul Buku</label>
+                <input id="judul" type="text" name="judul" maxlength="100" placeholder="Masukkan judul buku" required>
             </div>
             <div class="form-group">
-                <label>Penulis</label>
-                <input type="text" name="penulis"
-                placeholder="Masukkan nama penulis" required>
+                <label for="penulis">Penulis</label>
+                <input id="penulis" type="text" name="penulis" maxlength="100" placeholder="Masukkan nama penulis" required>
             </div>
             <div class="form-group">
-                <label>Penerbit</label>
-                <input type="text" name="penerbit"
-                placeholder="Masukkan nama penerbit" required>
+                <label for="penerbit">Penerbit</label>
+                <input id="penerbit" type="text" name="penerbit" maxlength="100" placeholder="Masukkan nama penerbit" required>
             </div>
             <div class="form-group">
-                <label>Tahun Terbit</label>
-                <input type="number" name="tahun"
-                placeholder="Contoh: 2024" required>
+                <label for="tahun">Tahun Terbit</label>
+                <input id="tahun" type="number" name="tahun" min="1" max="2100" placeholder="Contoh: 2024" required>
             </div>
-            <div class="form-button">
-                <button type="submit" name="simpan">
-                    Simpan Buku
-                </button>
-                <a href="index.php" class="btn-kembali">
-                    Kembali
-                </a>
+            <div class="form-actions">
+                <button class="btn btn-primary btn-full" type="submit">Simpan Buku</button>
+                <a class="btn btn-light btn-full" href="index.php">Batal</a>
             </div>
         </form>
-    </div>
-</div>__
+    </section>
+</main>
+<footer>© <?= date('Y') ?> Sistem Manajemen Buku Perpustakaan</footer>
 </body>
 </html>
